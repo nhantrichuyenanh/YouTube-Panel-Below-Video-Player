@@ -1,23 +1,24 @@
 {
   "manifest_version": 3,
   "name": "YouTube Panel Below Video Player",
-  "version": "1.0",
+  "version": "1.0.1",
   "description": "Moves the panel from the right side of the video player to below it on YouTube videos.",
   "content_scripts": [
     {
-      "matches": ["https://www.youtube.com/watch?v=*"],
+      "matches": ["https://www.youtube.com/*"],
       "js": ["content.js"],
-      "run_at": "document_idle"
+      "run_at": "document_end"
     }
   ],
   "icons": {
     "48": "icons/icon48.png",
     "96": "icons/icon96.png"
   },
+  "permissions": ["webNavigation"],
   "browser_specific_settings": {
-  "gecko": {
-    "id": "demonstration@email.com",
-    "strict_min_version": "109.0"
+    "gecko": {
+      "id": "demonstration@email.com",
+      "strict_min_version": "109.0"
     }
   }
 }
