@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTube Panel Below Video Player",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Moves the panel from the right side of the video player to below it on YouTube videos.",
   "author": "Nhân Trí",
   "homepage_url": "https://github.com/nhantrichuyenanh/YouTube-Panel-Below-Video-Player",
@@ -16,7 +16,6 @@
       "run_at": "document_end"
     }
   ],
-  "permissions": ["webNavigation"],
   "browser_specific_settings": {
     "gecko": {
       "id": "demonstration@email.com",

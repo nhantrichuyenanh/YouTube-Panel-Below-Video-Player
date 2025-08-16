@@ -1,102 +1,23 @@
-(function() {
-    'use strict';
+(function () {
+  'use strict';
 
-    let observer = null;
+  function movePanel() {
+    try {
+      const panel = document.getElementById('panels') || document.querySelector('#panels');
+      const atf = document.getElementById('above-the-fold') || document.querySelector('#above-the-fold');
 
-    // find elements in the main document and shadow DOMs
-    function findElement(elementId) {
-        // check main document
-        let element = document.getElementById(elementId);
-        if (element) return element;
-
-        // recursively search shadow DOMs
-        const walker = document.createTreeWalker(document.documentElement, Node.ELEMENT_NODE, null, false);
-        let node;
-        while ((node = walker.nextNode())) {
-            if (node.shadowRoot) {
-                const shadowElement = node.shadowRoot.getElementById(elementId);
-                if (shadowElement) return shadowElement;
-                // search nested shadow DOMs
-                const nestedElement = findElementInShadow(node.shadowRoot, elementId);
-                if (nestedElement) return nestedElement;
-            }
-        }
-        return null;
+      if (!panel || !atf || !atf.parentNode) return;
+      if (panel.parentNode === atf.parentNode && panel.nextSibling === atf) return;
+      atf.parentNode.insertBefore(panel, atf);
+    } catch (e) {
     }
+  }
 
-    function findElementInShadow(root, elementId) {
-        const element = root.getElementById(elementId);
-        if (element) return element;
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    movePanel();
+  } else {
+    document.addEventListener('DOMContentLoaded', movePanel, { once: true });
+  }
 
-        const walker = root.createTreeWalker(root, Node.ELEMENT_NODE, null, false);
-        let node;
-        while ((node = walker.nextNode())) {
-            if (node.shadowRoot) {
-                const shadowElement = node.shadowRoot.getElementById(elementId);
-                if (shadowElement) return shadowElement;
-                const nestedElement = findElementInShadow(node.shadowRoot, elementId);
-                if (nestedElement) return nestedElement;
-            }
-        }
-        return null;
-    }
-
-    function movePanel() {
-        const panel = findElement('panels');
-        const atf = findElement('above-the-fold');
-        if (panel && atf && atf.parentNode) {
-            // ensure the panel hasn't already been moved
-            if (panel.nextSibling !== atf) {
-                atf.parentNode.insertBefore(panel, atf);
-            }
-        }
-    }
-
-    function startObservation() {
-        if (observer) return;
-
-        // check immediately in case elements are already present
-        movePanel();
-
-        // set up MutationObserver to watch for dynamic changes
-        observer = new MutationObserver(movePanel);
-        observer.observe(document.documentElement, {
-            childList: true,
-            subtree: true
-        });
-    }
-
-    function stopObservation() {
-        if (observer) {
-            observer.disconnect();
-            observer = null;
-        }
-    }
-
-    function handleUrlChange() {
-        if (window.location.href.includes('/watch?v=')) {
-            startObservation();
-        } else {
-            stopObservation();
-        }
-    }
-
-    handleUrlChange();
-
-    // listen for History API changes
-    window.addEventListener('popstate', handleUrlChange);
-    const originalPushState = history.pushState;
-    history.pushState = function(...args) {
-        originalPushState.apply(history, args);
-        handleUrlChange();
-    };
-    const originalReplaceState = history.replaceState;
-    history.replaceState = function(...args) {
-        originalReplaceState.apply(history, args);
-        handleUrlChange();
-    };
-
-    // observe body for SPA navigation changes
-    const bodyObserver = new MutationObserver(handleUrlChange);
-    bodyObserver.observe(document.body, { childList: true, subtree: true });
+  document.addEventListener('yt-navigate-finish', movePanel, { passive: true });
 })();
