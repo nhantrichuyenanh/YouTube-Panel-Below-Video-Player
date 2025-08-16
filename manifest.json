@@ -5,6 +5,10 @@
   "description": "Moves the panel from the right side of the video player to below it on YouTube videos.",
   "author": "Nhân Trí",
   "homepage_url": "https://github.com/nhantrichuyenanh/YouTube-Panel-Below-Video-Player",
+  "icons": {
+    "48": "icons/icon48.png",
+    "96": "icons/icon96.png"
+  },
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*"],
@@ -12,10 +16,6 @@
       "run_at": "document_end"
     }
   ],
-  "icons": {
-    "48": "icons/icon48.png",
-    "96": "icons/icon96.png"
-  },
   "permissions": ["webNavigation"],
   "browser_specific_settings": {
     "gecko": {
@@ -23,5 +23,4 @@
       "strict_min_version": "109.0"
     }
   }
-
 }
