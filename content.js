@@ -2,28 +2,43 @@
   'use strict';
 
   function moveElements() {
-    try {
-      const panel = document.getElementById('panels') || document.querySelector('#panels');
-      const chat = document.getElementById('chat-container') || document.querySelector('#chat-container');
-      const atf = document.getElementById('above-the-fold') || document.querySelector('#above-the-fold');
+    const atf = document.querySelector('#above-the-fold');
+    if (!atf || !atf.parentNode) return;
 
-      if (!atf || !atf.parentNode) return;
+    const panel = document.querySelector('#panels');
+    const chat = document.querySelector('#chat-container');
+    const playlist = document.querySelector('#secondary #secondary-inner #playlist') || document.querySelector('#secondary #playlist');
 
-      if (panel && !(panel.parentNode === atf.parentNode && panel.nextSibling === atf)) {
-        atf.parentNode.insertBefore(panel, atf);
-      }
+    if (panel && panel.parentNode !== atf.parentNode) {
+      atf.parentNode.insertBefore(panel, atf);
+    }
 
-      if (chat && !(chat.parentNode === atf.parentNode && chat.nextSibling === atf)) {
-        atf.parentNode.insertBefore(chat, atf);
-      }
-    } catch (e) {
+    if (chat && chat.parentNode !== atf.parentNode) {
+      atf.parentNode.insertBefore(chat, atf);
+    }
+
+    if (playlist && playlist.parentNode !== atf.parentNode) {
+      atf.parentNode.insertBefore(playlist, atf);
     }
   }
 
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  function observe() {
+    const obs = new MutationObserver(moveElements);
+    obs.observe(document.documentElement, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  function init() {
     moveElements();
+    observe();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
   } else {
-    document.addEventListener('DOMContentLoaded', moveElements, { once: true });
+    init();
   }
 
   document.addEventListener('yt-navigate-finish', moveElements, { passive: true });
