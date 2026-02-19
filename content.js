@@ -7,7 +7,8 @@
 
     const panel = document.querySelector('#panels');
     const chat = document.querySelector('#chat-container');
-    const playlist = document.querySelector('#secondary #secondary-inner #playlist') || document.querySelector('#secondary #playlist');
+    const playlist1 = document.querySelector('#secondary #secondary-inner #playlist')
+    const playlist2 = document.querySelector('#secondary #playlist');
 
     if (panel && panel.parentNode !== atf.parentNode) {
       atf.parentNode.insertBefore(panel, atf);
@@ -17,8 +18,12 @@
       atf.parentNode.insertBefore(chat, atf);
     }
 
-    if (playlist && playlist.parentNode !== atf.parentNode) {
-      atf.parentNode.insertBefore(playlist, atf);
+    if (playlist1 && playlist1.parentNode !== atf.parentNode) {
+      atf.parentNode.insertBefore(playlist1, atf);
+    }
+
+    if (playlist2 && playlist2.parentNode !== atf.parentNode) {
+      atf.parentNode.insertBefore(playlist2, atf);
     }
   }
 
